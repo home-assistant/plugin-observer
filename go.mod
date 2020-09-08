@@ -1,4 +1,4 @@
-module github.com/home-assistant/plugin-observare
+module github.com/home-assistant/plugin-observer
 
 go 1.14
 
