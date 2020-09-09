@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -47,11 +46,15 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 	}
 	defer reader.Close()
 
+	//read the first 8 bytes to ignore the HEADER part from docker container logs
+	p := make([]byte, 8)
+	reader.Read(p)
+
 	// Return the content
 	content, _ := ioutil.ReadAll(reader)
 
 	w.Header().Add("Content-Type", "text/plain")
-	fmt.Fprintf(w, string(content))
+	w.Write(content)
 }
 
 func supervisorRestart(w http.ResponseWriter, r *http.Request) {
