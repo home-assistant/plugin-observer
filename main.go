@@ -21,5 +21,6 @@ func main() {
 	apiKey = os.Getenv("OBSERVER_TOKEN")
 
 	http.HandleFunc("/logs", supervisorLogs)
+	http.HandleFunc("/restart", supervisorRestart)
 	http.ListenAndServe(":80", nil)
 }

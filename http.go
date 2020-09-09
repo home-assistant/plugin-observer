@@ -19,10 +19,12 @@ func checkAccessKey(r *http.Request) bool {
 }
 
 func supervisorLogs(w http.ResponseWriter, r *http.Request) {
-	var err error
-
 	if !checkAccessKey(r) {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -43,4 +45,25 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 	// Return the content
 	content, _ := ioutil.ReadAll(reader)
 	w.Write(content)
+}
+
+func supervisorRestart(w http.ResponseWriter, r *http.Request) {
+	if !checkAccessKey(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Read logs from container
+	err := cli.ContainerStop(context.Background(), "hassio_supervisor", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Return the content
+	w.WriteHeader(http.StatusOK)
 }
