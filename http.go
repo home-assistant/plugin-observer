@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -49,7 +48,9 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 
 	// Return the content
 	content, _ := ioutil.ReadAll(reader)
-	fmt.Fprint(w, content)
+
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Write(content)
 }
 
 func supervisorRestart(w http.ResponseWriter, r *http.Request) {
