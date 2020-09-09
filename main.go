@@ -14,7 +14,7 @@ var apiKey string
 func main() {
 	var err error
 
-	cli, err = client.NewEnvClient()
+	cli, err = client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		panic(err)
 	}
