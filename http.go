@@ -50,6 +50,7 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 	// Return the content
 	content, _ := ioutil.ReadAll(reader)
 
+	w.Header().Add("Content-Type", "text/plain")
 	fmt.Fprintf(w, string(content))
 }
 
