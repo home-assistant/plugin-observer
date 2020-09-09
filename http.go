@@ -35,8 +35,9 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 	reader, err := cli.ContainerLogs(context.Background(), "hassio_supervisor", types.ContainerLogsOptions{
 		ShowStdout: true,
 		ShowStderr: true,
-		Follow:     true,
+		Follow:     false,
 		Timestamps: false,
+		Tail:       "all",
 	})
 
 	if err != nil {
