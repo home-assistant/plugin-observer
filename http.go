@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/pkg/stdcopy"
 )
 
 func checkAccessKey(r *http.Request) bool {
@@ -46,15 +46,9 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 	}
 	defer reader.Close()
 
-	//read the first 8 bytes to ignore the HEADER part from docker container logs
-	p := make([]byte, 8)
-	reader.Read(p)
-
 	// Return the content
-	content, _ := ioutil.ReadAll(reader)
-
 	w.Header().Add("Content-Type", "text/plain")
-	w.Write(content)
+	stdcopy.StdCopy(w, w, reader)
 }
 
 func supervisorRestart(w http.ResponseWriter, r *http.Request) {
