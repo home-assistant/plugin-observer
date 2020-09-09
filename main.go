@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -22,5 +23,7 @@ func main() {
 
 	http.HandleFunc("/logs", supervisorLogs)
 	http.HandleFunc("/restart", supervisorRestart)
+
+	log.Print("Start internal API")
 	http.ListenAndServe(":80", nil)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/docker/docker/api/types"
@@ -13,6 +14,7 @@ func checkAccessKey(r *http.Request) bool {
 
 	// Check api key
 	if token != apiKey {
+		log.Printf("Unauthorized API access %s", r.RemoteAddr)
 		return false
 	}
 	return true
@@ -27,6 +29,7 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
+	log.Printf("Access to logs from %s", r.RemoteAddr)
 
 	// Read logs from container
 	reader, err := cli.ContainerLogs(context.Background(), "hassio_supervisor", types.ContainerLogsOptions{
@@ -56,6 +59,7 @@ func supervisorRestart(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
+	log.Printf("Access to restart from %s", r.RemoteAddr)
 
 	// Read logs from container
 	err := cli.ContainerStop(context.Background(), "hassio_supervisor", nil)
