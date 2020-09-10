@@ -1,2 +1,2 @@
 # plugin-observer
-Supervisor plugin observare to monitor host part of Supervisor
+Supervisor plugin observer to monitor host part of Supervisor
