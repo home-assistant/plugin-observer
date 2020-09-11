@@ -22,7 +22,8 @@ func checkNetwork(r *http.Request) bool {
 	}
 
 	// If supervisor is down
-	if supervisorPing() {
+	if !supervisorPing() {
+		log.Printf("API is disabled / Supervisor is running - %s", remote)
 		return true
 	}
 
