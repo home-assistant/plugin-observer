@@ -3,25 +3,34 @@ package main
 import (
 	"context"
 	"log"
+	"net"
 	"net/http"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/pkg/stdcopy"
 )
 
-func checkAccessKey(r *http.Request) bool {
-	token := r.Header.Get("X-Observer-Token")
+func checkNetwork(r *http.Request) bool {
+	remote := strings.Split(r.RemoteAddr, ":")[0]
+	remoteIP := net.ParseIP(remote)
 
-	// Check api key
-	if token != apiKey {
-		log.Printf("Unauthorized API access %s", r.RemoteAddr)
+	// Is in network
+	if !hassioNetwork.Contains(remoteIP) {
+		log.Printf("Access not allow from %s", remote)
 		return false
 	}
-	return true
+
+	// If supervisor is down
+	if supervisorPing() {
+		return true
+	}
+
+	return false
 }
 
 func supervisorLogs(w http.ResponseWriter, r *http.Request) {
-	if !checkAccessKey(r) {
+	if !checkNetwork(r) {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
 	}
@@ -52,7 +61,7 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func supervisorRestart(w http.ResponseWriter, r *http.Request) {
-	if !checkAccessKey(r) {
+	if !checkNetwork(r) {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
 	}
@@ -71,4 +80,17 @@ func supervisorRestart(w http.ResponseWriter, r *http.Request) {
 
 	// Return the content
 	w.WriteHeader(http.StatusOK)
+}
+
+type statusData struct {
+	On bool
+}
+
+func statusIndex(w http.ResponseWriter, r *http.Request) {
+	data := statusData{
+		On: supervisorPing(),
+	}
+
+	// Render Website
+	indexTemplate.Execute(w, data)
 }
