@@ -6,7 +6,7 @@ import (
 )
 
 func supervisorPing() bool {
-	response, err := http.Get("http://supervisor/ping")
+	response, err := http.Get("http://supervisor/supervisor/ping")
 	if err != nil {
 		log.Printf("Supervisor ping failed with error %s", err)
 		return false
