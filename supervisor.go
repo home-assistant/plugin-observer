@@ -13,7 +13,7 @@ func supervisorPing() bool {
 	}
 
 	// Check response
-	if response.StatusCode < 200 {
+	if response.StatusCode < 300 {
 		return true
 	}
 
