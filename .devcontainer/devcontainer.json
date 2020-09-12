@@ -1,5 +1,5 @@
 {
-	"name": "Plugin Observare",
+	"name": "Plugin Observer",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
