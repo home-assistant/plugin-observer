@@ -1,14 +1,12 @@
 package main
 
 import (
-	"context"
+	"bufio"
+	"bytes"
 	"log"
 	"net"
 	"net/http"
 	"strings"
-
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/pkg/stdcopy"
 )
 
 func checkNetwork(r *http.Request) bool {
@@ -30,7 +28,7 @@ func checkNetwork(r *http.Request) bool {
 	return false
 }
 
-func supervisorLogs(w http.ResponseWriter, r *http.Request) {
+func apiLogs(w http.ResponseWriter, r *http.Request) {
 	if !checkNetwork(r) {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
@@ -41,27 +39,17 @@ func supervisorLogs(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Access to logs from %s", r.RemoteAddr)
 
-	// Read logs from container
-	reader, err := cli.ContainerLogs(context.Background(), "hassio_supervisor", types.ContainerLogsOptions{
-		ShowStdout: true,
-		ShowStderr: true,
-		Follow:     false,
-		Timestamps: false,
-		Tail:       "all",
-	})
-
+	err := supervisorLogs(w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer reader.Close()
 
 	// Return the content
 	w.Header().Add("Content-Type", "text/plain")
-	stdcopy.StdCopy(w, w, reader)
 }
 
-func supervisorRestart(w http.ResponseWriter, r *http.Request) {
+func apiRestart(w http.ResponseWriter, r *http.Request) {
 	if !checkNetwork(r) {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
@@ -72,8 +60,7 @@ func supervisorRestart(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Access to restart from %s", r.RemoteAddr)
 
-	// Read logs from container
-	err := cli.ContainerStop(context.Background(), "hassio_supervisor", nil)
+	err := supervisorRestart()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -84,12 +71,22 @@ func supervisorRestart(w http.ResponseWriter, r *http.Request) {
 }
 
 type statusData struct {
-	On bool
+	On   bool
+	Logs string
 }
 
 func statusIndex(w http.ResponseWriter, r *http.Request) {
 	data := statusData{
 		On: supervisorPing(),
+	}
+
+	// Set logs
+	if !data.On {
+		var buf bytes.Buffer
+		logWriter := bufio.NewWriter(&buf)
+
+		supervisorLogs(logWriter)
+		data.Logs = buf.String()
 	}
 
 	// Render Website
