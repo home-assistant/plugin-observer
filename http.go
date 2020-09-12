@@ -77,7 +77,8 @@ type statusData struct {
 
 func statusIndex(w http.ResponseWriter, r *http.Request) {
 	data := statusData{
-		On: supervisorPing(),
+		On:   supervisorPing(),
+		Logs: "",
 	}
 
 	// Set logs
