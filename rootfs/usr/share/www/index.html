@@ -15,7 +15,9 @@
             {{if .On}}Connected{{else}}Disconnected{{end}}
           </span>
         </div>
-        <pre class="log">{{.Logs}}</pre>
+        {{ if not .On }}
+          <pre class="log">{{.Logs}}</pre>
+        {{ end }}
       </div>
   </body>
 </html>

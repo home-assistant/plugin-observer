@@ -88,13 +88,11 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 		var re = regexp.MustCompile(`\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)
 
-		logs := supervisorLogs(logWriter)
-
-		data.Logs = re.ReplaceAllLiteralString(buf.String(), "")
-
-		// Fallback to error
-		if data.Logs == "" {
-			data.Logs = logs.Error()
+		err := supervisorLogs(logWriter)
+		if err != nil {
+			data.Logs = err.Error()
+		} else {
+			data.Logs = re.ReplaceAllLiteralString(buf.String(), "")
 		}
 	}
 
