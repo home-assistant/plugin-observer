@@ -47,6 +47,6 @@ func main() {
 	http.Handle("/observer.css", staticFiles)
 	http.Handle("/observer.js", staticFiles)
 
-	log.Print("Start internal API on http://127.0.0.1:80")
+	log.Print("Start webserver on http://0.0.0.0:80")
 	http.ListenAndServe(":80", nil)
 }
