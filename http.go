@@ -83,7 +83,7 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set logs
-	if data.On {
+	if !data.On {
 		var buf bytes.Buffer
 		var re = regexp.MustCompile(`\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)
