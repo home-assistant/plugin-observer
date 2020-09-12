@@ -39,8 +39,8 @@ func main() {
 	indexTemplate = template.Must(template.ParseFiles(wwwRoot + "/index.html"))
 
 	http.HandleFunc("/", statusIndex)
-	http.HandleFunc("/logs", supervisorLogs)
-	http.HandleFunc("/restart", supervisorRestart)
+	http.HandleFunc("/logs", apiLogs)
+	http.HandleFunc("/restart", apiRestart)
 
 	// Serve static help files
 	staticFiles := http.FileServer(http.Dir(wwwRoot))
