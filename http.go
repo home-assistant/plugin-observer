@@ -86,8 +86,14 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 		var buf bytes.Buffer
 		logWriter := bufio.NewWriter(&buf)
 
-		supervisorLogs(logWriter)
+		logs := supervisorLogs(logWriter)
+
 		data.Logs = buf.String()
+
+		// Fallback to error
+		if data.Logs == "" {
+			data.Logs = logs.Error()
+		}
 	}
 
 	// Render Website
