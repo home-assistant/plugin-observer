@@ -3,10 +3,14 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 func supervisorPing() bool {
-	response, err := http.Get("http://supervisor/supervisor/ping")
+	httpClient := http.Client{
+		Timeout: 3 * time.Second,
+	}
+	response, err := httpClient.Get("http://supervisor/supervisor/ping")
 	if err != nil {
 		log.Printf("Supervisor ping failed with error %s", err)
 		return false

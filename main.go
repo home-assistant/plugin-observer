@@ -14,6 +14,9 @@ var cli *client.Client
 var apiKey string
 var hassioNetwork *net.IPNet
 var indexTemplate *template.Template
+var staticFiles *http.Handler
+var wwwRoot string
+var development bool
 
 func main() {
 	var err error
@@ -25,12 +28,25 @@ func main() {
 
 	apiKey = os.Getenv("SUPERVISOR_TOKEN")
 	_, hassioNetwork, _ = net.ParseCIDR("172.30.32.0/23")
-	indexTemplate = template.Must(template.ParseFiles("/usr/share/www/index.html"))
+	development = (os.Getenv("DEVELOPMENT") == "True")
+
+	if development {
+		wwwRoot = "./rootfs/usr/share/www/"
+	} else {
+		wwwRoot = "/usr/share/www/"
+	}
+
+	indexTemplate = template.Must(template.ParseFiles(wwwRoot + "/index.html"))
 
 	http.HandleFunc("/", statusIndex)
 	http.HandleFunc("/logs", supervisorLogs)
 	http.HandleFunc("/restart", supervisorRestart)
 
-	log.Print("Start internal API")
+	// Serve static help files
+	staticFiles := http.FileServer(http.Dir(wwwRoot))
+	http.Handle("/observer.css", staticFiles)
+	http.Handle("/observer.js", staticFiles)
+
+	log.Print("Start internal API on http://127.0.0.1:80")
 	http.ListenAndServe(":80", nil)
 }
