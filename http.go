@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -82,13 +83,14 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set logs
-	if !data.On {
+	if data.On {
 		var buf bytes.Buffer
+		var re = regexp.MustCompile(`\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)
 
 		logs := supervisorLogs(logWriter)
 
-		data.Logs = buf.String()
+		data.Logs = re.ReplaceAllLiteralString(buf.String(), "")
 
 		// Fallback to error
 		if data.Logs == "" {
