@@ -41,7 +41,11 @@ h1 {
     white-space: pre-wrap;
     overflow-wrap: break-word;
     font-size: 12px;
+    line-height: 18px;
     font-family: monospace;
+    padding: 4px;
+    border-radius: 8px;
+    background-color: #fafafa;
 }
 
 @media only screen and (max-width: 600px) {
