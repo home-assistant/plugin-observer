@@ -3,11 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Assistant help portal</title>
+    <title>Home Assistant observer</title>
+    <link rel="stylesheet" href="/observer.css">
+    <script src="/observer.js"></script>
   </head>
   <body>
-      <p>
-          Supervisor: {{if .On}}Connected{{else}}Disconnected{{end}}
-      </p>
+      <div class="container">
+        <h1>Home Assistant observer</h1>
+        <div class="info">
+          <span class="title">Supervisor:</span>
+          <span id="connection" class="description {{if .On}}connected{{else}}disconnected{{end}}">
+            {{if .On}}Connected{{else}}Disconnected{{end}}
+          </span>
+        </div>
+        <pre id="log" class="log">{{.Logs}}</pre>
+      </div>
   </body>
 </html>
