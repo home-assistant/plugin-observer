@@ -4,17 +4,12 @@ import (
 	"context"
 	"io"
 	"log"
-	"net/http"
-	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/pkg/stdcopy"
 )
 
 func supervisorPing() bool {
-	httpClient := http.Client{
-		Timeout: 3 * time.Second,
-	}
 	response, err := httpClient.Get("http://supervisor/supervisor/ping")
 	if err != nil {
 		log.Printf("Supervisor ping failed with error %s", err)

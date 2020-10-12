@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	"time"
 
 	"github.com/docker/docker/client"
 )
@@ -14,9 +15,9 @@ var cli *client.Client
 var apiKey string
 var hassioNetwork *net.IPNet
 var indexTemplate *template.Template
-var staticFiles *http.Handler
 var wwwRoot string
 var development bool
+var httpClient http.Client
 
 func main() {
 	var err error
@@ -29,6 +30,7 @@ func main() {
 	apiKey = os.Getenv("SUPERVISOR_TOKEN")
 	_, hassioNetwork, _ = net.ParseCIDR("172.30.32.0/23")
 	development = (os.Getenv("DEVELOPMENT") == "True")
+	httpClient = http.Client{Timeout: 3 * time.Second} //nolint
 
 	if development {
 		wwwRoot = "./rootfs/usr/share/www/"
