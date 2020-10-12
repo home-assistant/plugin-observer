@@ -12,7 +12,7 @@ import (
 )
 
 var cli *client.Client
-var apiKey string
+var apiKey string //nolint
 var hassioNetwork *net.IPNet
 var indexTemplate *template.Template
 var wwwRoot string
@@ -30,7 +30,7 @@ func main() {
 	apiKey = os.Getenv("SUPERVISOR_TOKEN")
 	_, hassioNetwork, _ = net.ParseCIDR("172.30.32.0/23")
 	development = (os.Getenv("DEVELOPMENT") == "True")
-	httpClient = http.Client{Timeout: 3 * time.Second} //nolint
+	httpClient = http.Client{Timeout: 3 * time.Second}
 
 	if development {
 		wwwRoot = "./rootfs/usr/share/www/"
