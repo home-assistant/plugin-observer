@@ -20,7 +20,7 @@ func checkNetwork(r *http.Request) bool {
 		return false
 	}
 
-	return false
+	return true
 }
 
 func apiPing(w http.ResponseWriter, r *http.Request) {
