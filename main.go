@@ -41,6 +41,7 @@ func main() {
 	indexTemplate = template.Must(template.ParseFiles(wwwRoot + "/index.html"))
 
 	http.HandleFunc("/", statusIndex)
+	http.HandleFunc("/ping", apiPing)
 	http.HandleFunc("/logs", apiLogs)
 	http.HandleFunc("/restart", apiRestart)
 
