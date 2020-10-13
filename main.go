@@ -27,8 +27,15 @@ func main() {
 		panic(err)
 	}
 
+	// Generate Network check
+	networkMask := "172.30.32.0/23"
+	if env := os.Getenv("NETWORK_MASK"); env != "" {
+		networkMask = env
+	}
+	_, hassioNetwork, _ = net.ParseCIDR(networkMask)
+
+	// system settings
 	apiKey = os.Getenv("SUPERVISOR_TOKEN")
-	_, hassioNetwork, _ = net.ParseCIDR("172.30.32.0/23")
 	development = (os.Getenv("DEVELOPMENT") == "True")
 	httpClient = http.Client{Timeout: 3 * time.Second}
 
@@ -40,6 +47,7 @@ func main() {
 
 	indexTemplate = template.Must(template.ParseFiles(wwwRoot + "/index.html"))
 
+	// API setup
 	http.HandleFunc("/", statusIndex)
 	http.HandleFunc("/ping", apiPing)
 	http.HandleFunc("/logs", apiLogs)
