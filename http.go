@@ -20,13 +20,16 @@ func checkNetwork(r *http.Request) bool {
 		return false
 	}
 
-	// If supervisor is down
-	if !supervisorPing() {
-		log.Printf("API is disabled / Supervisor is running - %s", remote)
-		return true
+	return false
+}
+
+func apiPing(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
 	}
 
-	return false
+	w.WriteHeader(http.StatusOK)
 }
 
 func apiLogs(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +54,7 @@ func apiLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiRestart(w http.ResponseWriter, r *http.Request) {
-	if !checkNetwork(r) {
+	if !checkNetwork(r) || supervisorPing() {
 		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return
 	}
