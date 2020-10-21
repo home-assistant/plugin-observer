@@ -6,4 +6,4 @@ Supervisor plugin observer to monitor host part of Supervisor
 
 - GET `/logs`
 - POST `/restart`
-
+- GET `/ping`
