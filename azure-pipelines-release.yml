@@ -95,9 +95,9 @@ stages:
               beta_version="$(jq --raw-output '.observer' beta.json)"
 
               if [[ "$version" =~ dev ]]; then
-                sed -i "s|\"observer\": \"$dev_version\"|\"supervisor\": \"$version\"|g" dev.json
+                sed -i "s|\"observer\": \"$dev_version\"|\"observer\": \"$version\"|g" dev.json
               else
-                sed -i "s|\"observer\": \"$beta_version\"|\"supervisor\": \"$version\"|g" beta.json
+                sed -i "s|\"observer\": \"$beta_version\"|\"observer\": \"$version\"|g" beta.json
               fi
 
               git commit -am "Bump Observer $version"
