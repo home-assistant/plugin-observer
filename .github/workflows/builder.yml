@@ -7,6 +7,12 @@ on:
     types: ["published"]
   push:
     branches: ["master"]
+    paths:
+    - Dockerfile
+    - build.json
+    - 'rootfs/**' 
+    - '**.go'
+    - go.mod
 
 env:
   BUILD_NAME: observer # This needs to match the key in the version file
