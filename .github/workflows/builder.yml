@@ -8,8 +8,8 @@ on:
   push:
     branches: ["master"]
 
-env:	
-  BUILD_NAME: observer # This needs to match the key in the version file	
+env:
+  BUILD_NAME: observer # This needs to match the key in the version file
   BUILD_TYPE: plugin # Can be plugin, core, supervisor or generic
 
 jobs:
