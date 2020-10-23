@@ -8,6 +8,10 @@ on:
   push:
     branches: ["master"]
 
+env:	
+  BUILD_NAME: observer # This needs to match the key in the version file	
+  BUILD_TYPE: plugin # Can be plugin, core, supervisor or generic
+
 jobs:
   build:
     name: Build plugin
@@ -22,7 +26,7 @@ jobs:
       id: version
       uses: home-assistant/actions/helpers/version@master
       with:
-        type: plugin
+        type: ${{ env.BUILD_TYPE }}
 
     - name: Initialize git
       if: steps.version.outputs.publish == 'true'
@@ -56,6 +60,6 @@ jobs:
       if: steps.version.outputs.publish == 'true'
       uses: home-assistant/actions/helpers/version-push@master
       with:
-        key: observer
+        key: ${{ env.BUILD_NAME }}
         version: ${{ steps.version.outputs.version }}
         channel: ${{ steps.version.outputs.channel }}
