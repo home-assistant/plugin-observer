@@ -55,7 +55,7 @@ jobs:
           --generic ${{ steps.version.outputs.version }}
 
     - name: Update version file
-      if: steps.publish.outputs.publish == 'true'
+      if: steps.version.outputs.publish == 'true'
       uses: home-assistant/actions/helpers/version-push@master
       with:
         key: $BUILD_NAME
