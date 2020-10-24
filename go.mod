@@ -1,6 +1,6 @@
 module github.com/home-assistant/plugin-observer
 
-go 1.14
+go 1.15
 
 require (
 	github.com/containerd/containerd v1.4.0 // indirect
