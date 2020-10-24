@@ -25,12 +25,14 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Get version
       id: version
       uses: home-assistant/actions/helpers/version@master
       with:
-        type: $BUILD_TYPE
+        type: ${{ env.BUILD_TYPE }}
 
     - name: Initialize git
       if: steps.version.outputs.publish == 'true'
@@ -64,6 +66,6 @@ jobs:
       if: steps.version.outputs.publish == 'true'
       uses: home-assistant/actions/helpers/version-push@master
       with:
-        key: $BUILD_NAME
+        key: ${{ env.BUILD_NAME }}
         version: ${{ steps.version.outputs.version }}
         channel: ${{ steps.version.outputs.channel }}
