@@ -35,7 +35,7 @@ jobs:
 
     - name: Get information
       id: info
-      uses: home-assistant/actions/helpers/info@info-helper
+      uses: home-assistant/actions/helpers/info@master
 
     - name: Get version
       id: version
