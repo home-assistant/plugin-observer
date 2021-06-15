@@ -10,6 +10,12 @@
     },
     "labels": {
         "io.hass.type": "observer",
-        "org.opencontainers.image.source": "https://github.com/home-assistant/plugin-observer"
+        "org.opencontainers.image.title": "Home Assistant Observer Plugin",
+        "org.opencontainers.image.description": "Home Assistant Supervisor plugin monitor Supervisor",
+        "org.opencontainers.image.source": "https://github.com/home-assistant/plugin-observer",
+        "org.opencontainers.image.authors": "The Home Assistant Authors",
+        "org.opencontainers.image.url": "https://www.home-assistant.io/",
+        "org.opencontainers.image.documentation": "https://www.home-assistant.io/docs/",
+        "org.opencontainers.image.licenses": "Apache License 2.0"
     }
 }
