@@ -1,18 +1,17 @@
 {
 	"name": "Plugin Observer",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": {
-			"VARIANT": "1.15",
-			"INSTALL_NODE": "false",
-			"NODE_VERSION": "lts/*"
-		}
-	},
+	"image": "mcr.microsoft.com/vscode/devcontainers/go:1.17",
 	"postCreateCommand": "go mod download",
 	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+	"containerEnv": {"DEVELOPMENT": "True"},
 	"settings": { 
-		"terminal.integrated.shell.linux": "/bin/bash",
-		"go.useGoProxyToCheckForToolUpdates": false,
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+			  "path": "/bin/bash"
+			}
+		  },
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"go.toolsManagement.checkForUpdates": "off",
 		"go.useLanguageServer": true,
 		"go.gopath": "/go",
 		"go.goroot": "/usr/local/go",
