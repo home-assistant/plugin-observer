@@ -9,13 +9,35 @@
   <body>
       <div class="container">
         <h1>Home Assistant observer</h1>
-        <div class="info">
-          <span class="title">Supervisor:</span>
-          <span class="description {{if .On}}connected{{else}}disconnected{{end}}">
-            {{if .On}}Connected{{else}}Disconnected{{end}}
-          </span>
-        </div>
-        {{ if not .On }}
+        <table>
+          <tr>
+            <td>
+              Supervisor:
+            </td>
+            <td class="{{if .SupervisorConnected}}connected{{else}}disconnected{{end}}">
+              {{if .SupervisorConnected}}Connected{{else}}Disconnected{{end}}
+            </td>
+          </tr>
+          {{if .SupervisorConnected}}
+          <tr>
+            <td>
+              Supported:
+            </td>
+            <td class="{{if .Supported}}connected{{else}}disconnected{{end}}">
+              {{if .Supported}}Supported{{else}}Unsupported{{end}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Healthy:
+            </td>
+            <td class="{{if .Healthy}}connected{{else}}disconnected{{end}}">
+              {{if .Healthy}}Healthy{{else}}Unhealthy{{end}}
+            </td>
+          </tr>
+          {{end}}
+        </table>
+        {{ if not .SupervisorConnected }}
           <pre class="log">{{.Logs}}</pre>
         {{ end }}
       </div>

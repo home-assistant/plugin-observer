@@ -75,18 +75,28 @@ func apiRestart(w http.ResponseWriter, r *http.Request) {
 }
 
 type statusData struct {
-	On   bool
-	Logs string
+	SupervisorConnected bool
+	Supported           bool
+	Healthy             bool
+	Logs                string
 }
 
 func statusIndex(w http.ResponseWriter, r *http.Request) {
 	data := statusData{
-		On:   supervisorPing(),
-		Logs: "",
+		SupervisorConnected: supervisorPing(),
+	}
+
+	if data.SupervisorConnected {
+		supervisorInfo, err := getSupervisorInfo()
+		if err == nil {
+			data.Healthy = supervisorInfo.Healthy
+			data.Supported = supervisorInfo.Supported
+		}
+
 	}
 
 	// Set logs
-	if !data.On {
+	if !data.SupervisorConnected {
 		var buf bytes.Buffer
 		var re = regexp.MustCompile(`\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)
