@@ -74,7 +74,7 @@ func getSupervisorInfo() (SupervisorInfo, error) {
 	jsonData, _ := json.Marshal(response.Data)
 	json.Unmarshal(jsonData, &supervisorInfo)
 
-	return supervisorInfo, err
+	return supervisorInfo, nil
 }
 
 func supervisorLogs(w io.Writer) error {
