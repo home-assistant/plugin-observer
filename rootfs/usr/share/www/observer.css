@@ -18,11 +18,8 @@ body {
         0px 1px 1px 0px rgba(0, 0, 0, 0.14),
         0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
-.info {
-    display: flex;
-    align-items: center;
-}
-.info .title {
+
+.title {
     margin-right: 8px;
 }
 .connected {
@@ -31,7 +28,7 @@ body {
 .disconnected {
     color: red;
 }
-.title {
+table tr td:first-of-type {
     font-weight: bold;
 }
 h1 {
