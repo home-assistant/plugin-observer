@@ -97,14 +97,3 @@ func supervisorLogs(w io.Writer) error {
 	_, err = stdcopy.StdCopy(w, w, reader)
 	return err
 }
-
-func supervisorRestart() error {
-	// Read logs from container
-	err := cli.ContainerStop(context.Background(), "hassio_supervisor", nil)
-	if err != nil {
-		log.Printf("Can't stop supervisor: %s", err)
-		return err
-	}
-
-	return nil
-}
