@@ -51,7 +51,6 @@ func main() {
 	http.HandleFunc("/", statusIndex)
 	http.HandleFunc("/ping", apiPing)
 	http.HandleFunc("/logs", apiLogs)
-	http.HandleFunc("/restart", apiRestart)
 
 	// Serve static help files
 	staticFiles := http.FileServer(http.Dir(wwwRoot))

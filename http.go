@@ -53,27 +53,6 @@ func apiLogs(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/plain")
 }
 
-func apiRestart(w http.ResponseWriter, r *http.Request) {
-	if !checkNetwork(r) || supervisorPing() {
-		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-		return
-	}
-	if r.Method != "POST" {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
-	}
-	log.Printf("Access to restart from %s", r.RemoteAddr)
-
-	err := supervisorRestart()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Return the content
-	w.WriteHeader(http.StatusOK)
-}
-
 type statusData struct {
 	SupervisorConnected bool
 	Supported           bool
