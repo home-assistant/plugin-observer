@@ -72,11 +72,7 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 			data.SupervisorResponse = true
 			data.Healthy = supervisorInfo.Healthy
 			data.Supported = supervisorInfo.Supported
-		} else {
-			data.Logs = err.Error()
-			data.SupervisorResponse = false
 		}
-
 	}
 
 	// Set logs

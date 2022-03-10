@@ -29,7 +29,7 @@ type SupervisorInfo struct {
 
 func supervisorApiProxy(path string) (SupervisorResponse, error) {
 	var jsonResponse SupervisorResponse
-	request, _ := http.NewRequest("GET", fmt.Sprintf("http://192.168.100.3:80/%s", path), nil)
+	request, _ := http.NewRequest("GET", fmt.Sprintf("http://supervisor/%s", path), nil)
 	request.Header = http.Header{
 		"Authorization": []string{fmt.Sprintf("Bearer %s", os.Getenv("SUPERVISOR_TOKEN"))},
 	}
