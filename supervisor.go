@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/pkg/stdcopy"
@@ -27,7 +29,7 @@ type SupervisorInfo struct {
 
 func supervisorApiProxy(path string) (SupervisorResponse, error) {
 	var jsonResponse SupervisorResponse
-	request, _ := http.NewRequest("GET", fmt.Sprintf("http://supervisor/%s", path), nil)
+	request, _ := http.NewRequest("GET", fmt.Sprintf("http://192.168.100.3:80/%s", path), nil)
 	request.Header = http.Header{
 		"Authorization": []string{fmt.Sprintf("Bearer %s", os.Getenv("SUPERVISOR_TOKEN"))},
 	}
@@ -38,9 +40,9 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 		return jsonResponse, err
 	}
 
-	if response.StatusCode >= 300 {
+	if response.StatusCode >= 300 && response.StatusCode != 400 {
 		log.Printf("Supervisor API call failed with status code %v", response.StatusCode)
-		return jsonResponse, err
+		return jsonResponse, errors.New(fmt.Sprintf("Supervisor API call failed with status code %v", response.StatusCode))
 	}
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
@@ -49,15 +51,23 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 	}
 
 	defer response.Body.Close()
-
 	json.Unmarshal([]byte(bodyBytes), &jsonResponse)
+
+	if response.StatusCode == 400 {
+		return jsonResponse, errors.New("Supervisor API call failed with status code 400")
+	}
+
 	return jsonResponse, err
 }
 
 func supervisorPing() bool {
-	_, err := supervisorApiProxy("supervisor/ping")
+	data, err := supervisorApiProxy("supervisor/ping")
 	if err != nil {
 		log.Printf("Supervisor ping failed with error %s", err)
+		if strings.HasPrefix(data.Message, "System is not ready with state:") {
+			// This is an API error, but we got a proper response so we accept it
+			return true
+		}
 		return false
 	}
 	return true

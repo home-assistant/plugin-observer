@@ -55,6 +55,7 @@ func apiLogs(w http.ResponseWriter, r *http.Request) {
 
 type statusData struct {
 	SupervisorConnected bool
+	SupervisorResponse  bool
 	Supported           bool
 	Healthy             bool
 	Logs                string
@@ -68,8 +69,12 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	if data.SupervisorConnected {
 		supervisorInfo, err := getSupervisorInfo()
 		if err == nil {
+			data.SupervisorResponse = true
 			data.Healthy = supervisorInfo.Healthy
 			data.Supported = supervisorInfo.Supported
+		} else {
+			data.Logs = err.Error()
+			data.SupervisorResponse = false
 		}
 
 	}
