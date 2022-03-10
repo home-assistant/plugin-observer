@@ -42,7 +42,7 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 
 	if response.StatusCode >= 300 && response.StatusCode != 400 {
 		log.Printf("Supervisor API call failed with status code %v", response.StatusCode)
-		return jsonResponse, errors.New(fmt.Sprintf("Supervisor API call failed with status code %v", response.StatusCode))
+		return jsonResponse, fmt.Errorf("Supervisor API call failed with status code %v", response.StatusCode)
 	}
 
 	bodyBytes, err := ioutil.ReadAll(response.Body)
