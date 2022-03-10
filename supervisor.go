@@ -64,11 +64,8 @@ func supervisorPing() bool {
 	data, err := supervisorApiProxy("supervisor/ping")
 	if err != nil {
 		log.Printf("Supervisor ping failed with error %s", err)
-		if strings.HasPrefix(data.Message, "System is not ready with state:") {
-			// This is an API error, but we got a proper response so we accept it
-			return true
-		}
-		return false
+		// This is an API error, but we got a proper response so we accept it
+		return strings.HasPrefix(data.Message, "System is not ready with state:")
 	}
 	return true
 }
