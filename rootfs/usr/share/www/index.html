@@ -23,16 +23,16 @@
             <td>
               Supported:
             </td>
-            <td class="{{if .Supported}}connected{{else}}disconnected{{end}}">
-              {{if .Supported}}Supported{{else}}Unsupported{{end}}
+            <td class="{{if .Supported}}connected{{else if .SupervisorResponse}}disconnected{{end}}">
+              {{if .Supported}}Supported{{else if not .SupervisorResponse}}Processing...{{else}}Unsupported{{end}}
             </td>
           </tr>
           <tr>
             <td>
               Healthy:
             </td>
-            <td class="{{if .Healthy}}connected{{else}}disconnected{{end}}">
-              {{if .Healthy}}Healthy{{else}}Unhealthy{{end}}
+            <td class="{{if .Healthy}}connected{{else if .SupervisorResponse}}disconnected{{end}}">
+              {{if .Healthy}}Healthy{{else if not .SupervisorResponse}}Processing...{{else}}Unhealthy{{end}}
             </td>
           </tr>
           {{end}}
