@@ -31,3 +31,5 @@ FROM ${BUILD_FROM}
 WORKDIR /
 COPY --from=builder /workspace/observer /usr/bin/observer
 COPY rootfs /
+
+ENTRYPOINT ["/usr/bin/observer"]
