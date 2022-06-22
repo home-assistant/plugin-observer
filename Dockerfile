@@ -1,3 +1,4 @@
+ARG BUILD_FROM
 FROM golang:1.17-alpine3.14 AS builder
 
 WORKDIR /workspace/observer-plugin
@@ -24,7 +25,7 @@ RUN \
     && rm -rf /workspace/observer-plugin
 
 
-FROM scratch
+FROM ${BUILD_FROM}
 
 WORKDIR /
 COPY --from=builder /workspace/observer /usr/bin/observer

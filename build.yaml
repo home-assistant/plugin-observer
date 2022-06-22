@@ -1,5 +1,11 @@
 image: homeassistant/{arch}-hassio-observer
 shadow_repository: ghcr.io/home-assistant
+build_from:
+  aarch64: scratch
+  armhf: scratch
+  armv7: scratch
+  amd64: scratch
+  i386: scratch
 codenotary:
   signer: notary@home-assistant.io
   base_image: notary@home-assistant.io
