@@ -79,6 +79,7 @@ jobs:
         args: |
           $BUILD_ARGS \
           --${{ matrix.arch }} \
+          --platform linux/386 \ 
           --target /data \
           --generic ${{ needs.init.outputs.version }}
       env:
