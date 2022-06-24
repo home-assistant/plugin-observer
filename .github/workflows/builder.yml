@@ -74,13 +74,13 @@ jobs:
       run: echo "BUILD_ARGS=--test" >> $GITHUB_ENV
 
     - name: Build plugin
-      uses: home-assistant/builder@2022.06.2
+      uses: home-assistant/builder@2022.06.3
       with:
         args: |
           $BUILD_ARGS \
           --${{ matrix.arch }} \
-          --platform linux/386 \ 
           --target /data \
+          -- buildx \
           --generic ${{ needs.init.outputs.version }}
       env:
         CAS_API_KEY: ${{ secrets.CAS_TOKEN }}
