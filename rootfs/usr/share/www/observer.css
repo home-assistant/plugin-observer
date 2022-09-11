@@ -28,8 +28,10 @@ body {
 .disconnected {
     color: red;
 }
-.reason {
+.reason, .reason a {
     color: #212121;
+}
+li.reason {
     margin-left: 12px;
 }
 
