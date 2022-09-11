@@ -28,8 +28,16 @@ body {
 .disconnected {
     color: red;
 }
+.reason, .reason a {
+    color: #212121;
+}
+li.reason {
+    margin-left: 12px;
+}
+
 table tr td:first-of-type {
     font-weight: bold;
+    vertical-align: top;
 }
 h1 {
     margin-top: 8px;

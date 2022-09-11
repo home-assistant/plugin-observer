@@ -57,7 +57,9 @@ type statusData struct {
 	SupervisorConnected bool
 	SupervisorResponse  bool
 	Supported           bool
+	Unsupported			[]string
 	Healthy             bool
+	Unhealthy			[]string
 	Logs                string
 }
 
@@ -72,6 +74,12 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 			data.SupervisorResponse = true
 			data.Healthy = supervisorInfo.Healthy
 			data.Supported = supervisorInfo.Supported
+
+			resolutionInfo, err := getResolutionInfo()
+			if err == nil {
+				data.Unhealthy = resolutionInfo.Unhealthy
+				data.Unsupported = resolutionInfo.Unsupported
+			}
 		}
 	}
 

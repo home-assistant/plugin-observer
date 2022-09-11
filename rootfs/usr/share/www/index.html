@@ -24,7 +24,11 @@
               Supported:
             </td>
             <td class="{{if .Supported}}connected{{else if .SupervisorResponse}}disconnected{{end}}">
-              {{if .Supported}}Supported{{else if not .SupervisorResponse}}Processing...{{else}}Unsupported{{end}}
+              {{if .Supported}}Supported{{else if not .SupervisorResponse}}Processing...{{else}}Unsupported
+                {{range $reason := .Unsupported}}
+                  <li class="reason"><a href="https://www.home-assistant.io/more-info/unsupported/{{$reason}}" target="_blank">{{$reason}}</a></li>
+                {{end}}
+              {{end}}
             </td>
           </tr>
           <tr>
@@ -32,7 +36,11 @@
               Healthy:
             </td>
             <td class="{{if .Healthy}}connected{{else if .SupervisorResponse}}disconnected{{end}}">
-              {{if .Healthy}}Healthy{{else if not .SupervisorResponse}}Processing...{{else}}Unhealthy{{end}}
+              {{if .Healthy}}Healthy{{else if not .SupervisorResponse}}Processing...{{else}}Unhealthy
+                {{range $reason := .Unhealthy}}
+                  <li class="reason"><a href="https://www.home-assistant.io/more-info/unhealthy/{{$reason}}" target="_blank">{{$reason}}</a></li>
+                {{end}}
+              {{end}}
             </td>
           </tr>
           {{end}}
