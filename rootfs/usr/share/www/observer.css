@@ -28,8 +28,14 @@ body {
 .disconnected {
     color: red;
 }
+.reason {
+    color: #212121;
+    margin-left: 12px;
+}
+
 table tr td:first-of-type {
     font-weight: bold;
+    vertical-align: top;
 }
 h1 {
     margin-top: 8px;

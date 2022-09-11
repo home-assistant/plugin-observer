@@ -27,6 +27,11 @@ type SupervisorInfo struct {
 	Supported bool `json:"supported"`
 }
 
+type ResolutionInfo struct {
+	Unhealthy   []string `json:"unhealthy"`
+	Unsupported []string `json:"unsupported"`
+}
+
 func supervisorApiProxy(path string) (SupervisorResponse, error) {
 	var jsonResponse SupervisorResponse
 	request, _ := http.NewRequest("GET", fmt.Sprintf("http://supervisor/%s", path), nil)
@@ -82,6 +87,20 @@ func getSupervisorInfo() (SupervisorInfo, error) {
 	json.Unmarshal(jsonData, &supervisorInfo)
 
 	return supervisorInfo, nil
+}
+
+func getResolutionInfo() (ResolutionInfo, error) {
+	var resolutionInfo ResolutionInfo
+	response, err := supervisorApiProxy("resolution/info")
+	if err != nil {
+		log.Printf("Supervisor API call failed with error %s", err)
+		return resolutionInfo, err
+	}
+
+	jsonData, _ := json.Marshal(response.Data)
+	json.Unmarshal(jsonData, &resolutionInfo)
+
+	return resolutionInfo, nil
 }
 
 func supervisorLogs(w io.Writer) error {
