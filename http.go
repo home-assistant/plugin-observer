@@ -56,6 +56,7 @@ func apiLogs(w http.ResponseWriter, r *http.Request) {
 type statusData struct {
 	SupervisorConnected bool
 	SupervisorResponse  bool
+	SupervisorState     string
 	Supported           bool
 	Unsupported			[]string
 	Healthy             bool
@@ -64,8 +65,10 @@ type statusData struct {
 }
 
 func statusIndex(w http.ResponseWriter, r *http.Request) {
+	pingData := supervisorPing()
 	data := statusData{
-		SupervisorConnected: supervisorPing(),
+		SupervisorConnected:pingData.Connected,
+		SupervisorState: pingData.State,
 	}
 
 	if data.SupervisorConnected {
@@ -84,7 +87,7 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set logs
-	if !data.SupervisorConnected {
+	if  data.SupervisorState != "running" || !data.SupervisorConnected {
 		var buf bytes.Buffer
 		var re = regexp.MustCompile(`\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)

@@ -32,6 +32,11 @@ type ResolutionInfo struct {
 	Unsupported []string `json:"unsupported"`
 }
 
+type SupervisorPing struct {
+	Connected   bool
+	State       string
+}
+
 func supervisorApiProxy(path string) (SupervisorResponse, error) {
 	var jsonResponse SupervisorResponse
 	request, _ := http.NewRequest("GET", fmt.Sprintf("http://supervisor/%s", path), nil)
@@ -65,14 +70,21 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 	return jsonResponse, err
 }
 
-func supervisorPing() bool {
+func supervisorPing() SupervisorPing {
+	supervisorPingData := SupervisorPing{
+		Connected:true,
+	}
 	data, err := supervisorApiProxy("supervisor/ping")
 	if err != nil {
 		log.Printf("Supervisor ping failed with error %s", err)
-		// This is an API error, but we got a proper response so we accept it
-		return strings.HasPrefix(data.Message, "System is not ready with state:")
+		supervisorPingData.Connected = false
+		if strings.HasPrefix(data.Message, "System is not ready with state:") {
+			// This is an API error, but we got a proper response so we accept it
+			supervisorPingData.Connected = true
+			supervisorPingData.State = strings.ReplaceAll(data.Message, "System is not ready with state: ", "")
+		}
 	}
-	return true
+	return supervisorPingData
 }
 
 func getSupervisorInfo() (SupervisorInfo, error) {
