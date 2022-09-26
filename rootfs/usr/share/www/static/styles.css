@@ -1,9 +1,22 @@
+@font-face {
+    font-family: "Roboto";
+    src: local("Roboto Regular"), local("Roboto-Regular"),
+        url(/static/Roboto-Regular.woff2) format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+html {
+    color: #212121;
+    background-color: #0277bd;
+}
+
 body {
     font-size: 18px;
-    color: #212121;
-    background-color: #fafafa;
-    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
 }
+
+
 .container {
     padding: 16px;
     margin-top: 0;

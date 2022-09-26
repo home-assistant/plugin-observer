@@ -54,7 +54,11 @@ func main() {
 
 	// Serve static help files
 	staticFiles := http.FileServer(http.Dir(wwwRoot))
-	http.Handle("/observer.css", staticFiles)
+	http.Handle("/static/styles.css", staticFiles)
+	http.Handle("/static/scripts.js", staticFiles)
+	http.Handle("/static/tsparticles.min.js", staticFiles)
+	http.Handle("/static/Roboto-Regular.woff2", staticFiles)
+	
 
 	log.Print("Start webserver on http://0.0.0.0:80")
 	http.ListenAndServe(":80", nil)

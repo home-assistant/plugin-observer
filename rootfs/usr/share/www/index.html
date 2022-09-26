@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Assistant observer</title>
-    <link rel="stylesheet" href="/observer.css">
+    <link rel="stylesheet" href="/static/styles.css">
   </head>
-  <body>
+  <body id="particles">
       <div class="container">
         <h1>Home Assistant observer</h1>
         <table>
@@ -49,5 +49,8 @@
           <pre class="log">{{.Logs}}</pre>
         {{ end }}
       </div>
+
+    <script src="/static/tsparticles.min.js"></script>
+    <script src="/static/scripts.js"></script>
   </body>
 </html>
