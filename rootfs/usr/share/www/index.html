@@ -45,7 +45,7 @@
           </tr>
           {{end}}
         </table>
-        {{ if not .SupervisorConnected }}
+        {{ if .Logs }}
           <pre class="log">{{.Logs}}</pre>
         {{ end }}
       </div>
