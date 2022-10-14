@@ -67,7 +67,7 @@ type statusData struct {
 func statusIndex(w http.ResponseWriter, r *http.Request) {
 	pingData := supervisorPing()
 	data := statusData{
-		SupervisorConnected:pingData.Connected,
+		SupervisorConnected: pingData.Connected,
 		SupervisorState: pingData.State,
 	}
 
@@ -87,7 +87,7 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set logs
-	if  data.SupervisorState != "running" || !data.SupervisorConnected {
+	if  data.SupervisorState != "" || !data.SupervisorConnected {
 		var buf bytes.Buffer
 		var re = regexp.MustCompile(`\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)
