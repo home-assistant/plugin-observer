@@ -28,6 +28,8 @@ RUN \
 
 FROM ${BUILD_FROM}
 
+ENV DOCKER_HOST="unix:///run/docker.sock"
+
 WORKDIR /
 COPY --from=builder /workspace/observer /usr/bin/observer
 COPY rootfs /
