@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -33,8 +32,8 @@ type ResolutionInfo struct {
 }
 
 type SupervisorPing struct {
-	Connected   bool
-	State       string
+	Connected bool
+	State     string
 }
 
 func supervisorApiProxy(path string) (SupervisorResponse, error) {
@@ -55,7 +54,7 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 		return jsonResponse, fmt.Errorf("Supervisor API call failed with status code %v", response.StatusCode)
 	}
 
-	bodyBytes, err := ioutil.ReadAll(response.Body)
+	bodyBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return jsonResponse, err
 	}
@@ -72,7 +71,7 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 
 func supervisorPing() SupervisorPing {
 	supervisorPingData := SupervisorPing{
-		Connected:true,
+		Connected: true,
 	}
 	data, err := supervisorApiProxy("supervisor/ping")
 	if err != nil {
