@@ -1,6 +1,6 @@
 ARG BUILD_FROM
 
-FROM golang:1.19-alpine3.16 AS builder
+FROM --platform=amd64 golang:1.19-alpine3.16 AS builder
 
 WORKDIR /workspace/observer-plugin
 ARG BUILD_ARCH
