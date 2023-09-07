@@ -5,6 +5,8 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"text/template"
 	"time"
 
@@ -60,6 +62,23 @@ func main() {
 	http.Handle("/static/Roboto-Regular.woff2", staticFiles)
 	
 
-	log.Print("Start webserver on http://0.0.0.0:80")
-	http.ListenAndServe(":80", nil)
+	// Run webserver
+	go func() {
+		log.Print("Start webserver on http://0.0.0.0:80")
+		if err := http.ListenAndServe(":80", nil); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	signalChannel := make(chan os.Signal, 2)
+	signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
+	for {
+		sig := <-signalChannel
+		switch sig {
+		case os.Interrupt:
+			return
+		case syscall.SIGTERM:
+			return
+		}
+	}
 }
