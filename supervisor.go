@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/pkg/stdcopy"
 )
 
@@ -116,7 +116,7 @@ func getResolutionInfo() (ResolutionInfo, error) {
 
 func supervisorLogs(w io.Writer) error {
 	// Read logs from container
-	reader, err := cli.ContainerLogs(context.Background(), "hassio_supervisor", types.ContainerLogsOptions{
+	reader, err := cli.ContainerLogs(context.Background(), "hassio_supervisor", container.LogsOptions{
 		ShowStdout: true,
 		ShowStderr: true,
 		Follow:     false,
