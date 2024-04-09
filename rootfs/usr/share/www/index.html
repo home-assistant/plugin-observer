@@ -21,7 +21,7 @@
           {{if .SupervisorConnected}}
           <tr>
             <td>
-              Supported:
+              Support:
             </td>
             <td class="{{if .Supported}}connected{{else if .SupervisorResponse}}disconnected{{end}}">
               {{if .Supported}}Supported{{else if not .SupervisorResponse}}Processing...{{else}}Unsupported
@@ -33,7 +33,7 @@
           </tr>
           <tr>
             <td>
-              Healthy:
+              Health:
             </td>
             <td class="{{if .Healthy}}connected{{else if .SupervisorResponse}}disconnected{{end}}">
               {{if .Healthy}}Healthy{{else if not .SupervisorResponse}}Processing...{{else}}Unhealthy
