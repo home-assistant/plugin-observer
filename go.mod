@@ -2,7 +2,7 @@ module github.com/home-assistant/plugin-observer
 
 go 1.19
 
-require github.com/docker/docker v27.4.1+incompatible
+require github.com/docker/docker v27.5.0+incompatible
 
 require (
 	github.com/Microsoft/go-winio v0.5.0 // indirect
