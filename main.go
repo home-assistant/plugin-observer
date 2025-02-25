@@ -56,6 +56,7 @@ func main() {
 
 	// Serve static help files
 	staticFiles := http.FileServer(http.Dir(wwwRoot))
+	http.Handle("/static/favicon.ico", staticFiles)
 	http.Handle("/static/styles.css", staticFiles)
 	http.Handle("/static/scripts.js", staticFiles)
 	http.Handle("/static/tsparticles.min.js", staticFiles)
