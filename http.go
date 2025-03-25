@@ -89,7 +89,7 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	// Set logs
 	if  data.SupervisorState != "" || !data.SupervisorConnected {
 		var buf bytes.Buffer
-		var re = regexp.MustCompile(`\[\d+m`)
+		var re = regexp.MustCompile(`\x1b\[\d+m`)
 		logWriter := bufio.NewWriter(&buf)
 
 		err := supervisorLogs(logWriter)
@@ -101,5 +101,10 @@ func statusIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render Website
-	indexTemplate.Execute(w, data)
+	err := indexTemplate.Execute(w, data)
+	if err != nil {
+		log.Printf("failed to render template: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 }
