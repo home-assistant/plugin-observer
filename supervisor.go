@@ -51,19 +51,27 @@ func supervisorApiProxy(path string) (SupervisorResponse, error) {
 
 	if response.StatusCode >= 300 && response.StatusCode != 400 {
 		log.Printf("Supervisor API call failed with status code %v", response.StatusCode)
-		return jsonResponse, fmt.Errorf("Supervisor API call failed with status code %v", response.StatusCode)
+		return jsonResponse, fmt.Errorf("call to Supervisor API failed with status code %v", response.StatusCode)
 	}
 
 	bodyBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return jsonResponse, err
 	}
+	defer func() {
+		if err := response.Body.Close(); err != nil {
+			log.Printf("error closing response body: %v", err)
+		}
+	}()
 
-	defer response.Body.Close()
-	json.Unmarshal([]byte(bodyBytes), &jsonResponse)
+	err = json.Unmarshal([]byte(bodyBytes), &jsonResponse)
+	if err != nil {
+		log.Printf("json unmarshalling failed with error %s", err)
+		return jsonResponse, err
+	}
 
 	if response.StatusCode == 400 {
-		return jsonResponse, errors.New("Supervisor API call failed with status code 400")
+		return jsonResponse, errors.New("call to Supervisor API failed with status code 400")
 	}
 
 	return jsonResponse, err
@@ -95,7 +103,11 @@ func getSupervisorInfo() (SupervisorInfo, error) {
 	}
 
 	jsonData, _ := json.Marshal(response.Data)
-	json.Unmarshal(jsonData, &supervisorInfo)
+	err = json.Unmarshal(jsonData, &supervisorInfo)
+	if err != nil {
+		log.Printf("json unmarshalling failed with error %s", err)
+		return supervisorInfo, err
+	}
 
 	return supervisorInfo, nil
 }
@@ -109,7 +121,11 @@ func getResolutionInfo() (ResolutionInfo, error) {
 	}
 
 	jsonData, _ := json.Marshal(response.Data)
-	json.Unmarshal(jsonData, &resolutionInfo)
+	err = json.Unmarshal(jsonData, &resolutionInfo)
+	if err != nil {
+		log.Printf("json unmarshalling failed with error %s", err)
+		return resolutionInfo, err
+	}
 
 	return resolutionInfo, nil
 }
@@ -128,7 +144,13 @@ func supervisorLogs(w io.Writer) error {
 		log.Printf("Can't get supervisor logs %s", err)
 		return err
 	}
-	defer reader.Close()
+	defer func() {
+		if err := reader.Close(); err != nil {
+			log.Printf("error closing reader: %v", err)
+		}
+	}()
+
+
 
 	// Return the content
 	_, err = stdcopy.StdCopy(w, w, reader)
