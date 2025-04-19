@@ -2,7 +2,7 @@ module github.com/home-assistant/plugin-observer
 
 go 1.24
 
-require github.com/docker/docker v28.0.4+incompatible
+require github.com/docker/docker v28.1.0+incompatible
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
@@ -15,6 +15,7 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
+	github.com/moby/sys/atomicwriter v0.1.0 // indirect
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
