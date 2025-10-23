@@ -5,9 +5,6 @@ build_from:
   armv7: scratch
   amd64: scratch
   i386: scratch
-codenotary:
-  signer: notary@home-assistant.io
-  base_image: notary@home-assistant.io
 cosign:
   base_identity: https://github.com/home-assistant/docker-base/.*
   identity: https://github.com/home-assistant/plugin-observer/.*
