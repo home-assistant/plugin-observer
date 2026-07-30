@@ -1,6 +1,6 @@
 ARG BUILD_FROM=scratch
 
-FROM golang:1.25-alpine3.23 AS builder
+FROM golang:1.25-alpine3.24 AS builder
 
 WORKDIR /workspace/observer-plugin
 ARG TARGETARCH
