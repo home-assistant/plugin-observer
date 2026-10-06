@@ -24,25 +24,23 @@
       "groupSlug": "golang-x"
     },
     {
-      "description": "The go directive in go.mod is a minimum, so a new Go release satisfies it and Renovate never proposes it. Bump it instead.",
+      "description": "Leave the Go version in go.mod alone. Moving to a new Go release is a deliberate change, together with the golang image in the Dockerfile.",
       "matchManagers": ["gomod"],
-      "matchDepTypes": ["golang"],
-      "rangeStrategy": "bump"
-    },
-    {
-      "description": "The golang image in the Dockerfile follows the latest patch release on its own, so the go directive in go.mod only moves on a new minor",
-      "matchManagers": ["gomod"],
-      "matchDepTypes": ["golang"],
-      "matchUpdateTypes": ["patch"],
+      "matchDepTypes": ["golang", "toolchain"],
       "enabled": false
     },
     {
-      "description": "Move the go directive in go.mod and the golang image in the Dockerfile together, never one without the other",
-      "matchDatasources": ["docker", "golang-version"],
-      "matchPackageNames": ["golang", "go"],
-      "groupName": "Go",
-      "groupSlug": "go",
-      "minimumGroupSize": 2
+      "description": "Propose patch releases of the golang image on their own, instead of only the latest minor",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang"],
+      "separateMinorPatch": true
+    },
+    {
+      "description": "Only update the patch version of the golang image. Its minor version must match the go directive in go.mod, and both are changed by hand together.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang"],
+      "matchUpdateTypes": ["minor", "major"],
+      "enabled": false
     },
     {
       "description": "Group the home-assistant/builder subactions into one PR (they share a release)",
