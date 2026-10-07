@@ -1,0 +1,71 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "enabledManagers": ["dockerfile", "github-actions", "gomod"],
+  "minimumReleaseAge": "3 days",
+  "postUpdateOptions": ["gomodTidy"],
+  "semanticCommits": "disabled",
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "Label Go updates like Dependabot did",
+      "matchManagers": ["gomod", "dockerfile"],
+      "addLabels": ["go"]
+    },
+    {
+      "description": "Label GitHub Actions updates like Dependabot did",
+      "matchManagers": ["github-actions"],
+      "addLabels": ["github_actions"]
+    },
+    {
+      "description": "The golang.org/x modules are released together every month",
+      "matchPackageNames": ["golang.org/x/**"],
+      "groupName": "golang.org/x",
+      "groupSlug": "golang-x"
+    },
+    {
+      "description": "Leave the Go version in go.mod alone. Moving to a new Go release is a deliberate change, together with the golang image in the Dockerfile.",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["golang", "toolchain"],
+      "enabled": false
+    },
+    {
+      "description": "Propose patch releases of the golang image on their own, instead of only the latest minor",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang"],
+      "separateMinorPatch": true
+    },
+    {
+      "description": "Only update the patch version of the golang image. Its minor version must match the go directive in go.mod, and both are changed by hand together.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang"],
+      "matchUpdateTypes": ["minor", "major"],
+      "enabled": false
+    },
+    {
+      "description": "Group the home-assistant/builder subactions into one PR (they share a release)",
+      "matchPackageNames": ["/^home-assistant\\/builder(?:\\/|$)/"],
+      "groupName": "home-assistant/builder",
+      "groupSlug": "builder"
+    },
+    {
+      "description": "Docker Hub returns no release timestamps for the golang image, so the minimum release age would keep it pending forever",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Leave runner labels and action version inputs alone, Dependabot never updated those",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["github-runner", "uses-with"],
+      "enabled": false
+    },
+    {
+      "description": "Our own actions that follow a branch (like home-assistant/actions@master) float on purpose. Pinning them would open a digest PR in every repository for each change to them. Our own actions on a version tag are pinned like any other.",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["home-assistant/**"],
+      "matchCurrentValue": "/^(dev|main|master)$/",
+      "pinDigests": false
+    }
+  ]
+}
